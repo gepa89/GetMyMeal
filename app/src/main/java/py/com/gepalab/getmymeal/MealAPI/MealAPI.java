@@ -73,13 +73,7 @@ public class MealAPI {
                     category.idCategory = jsonObject.getString("idCategory");
                     category.strCategory = jsonObject.getString("strCategory");
                     category.strCategoryThumb = jsonObject.getString("strCategoryThumb");
-                    try {
-                        URL url = new URL(category.strCategoryThumb);
-                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        category.bitmap = image;
-                    } catch(IOException e) {
-                        System.out.println(e);
-                    }
+
                     // TODO complete implementation
                     ret.add(category);
 

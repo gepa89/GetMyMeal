@@ -3,10 +3,15 @@ package py.com.gepalab.getmymeal.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -24,12 +29,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import py.com.gepalab.getmymeal.Controller.AppController;
 import py.com.gepalab.getmymeal.Data.AppConfig;
@@ -66,7 +74,28 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("BOTON PAPA", "el boton ");
                         }
                     });
-                    imageButton.setImageBitmap(category.bitmap);
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                URL url = new URL(category.strCategoryThumb);
+                                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                category.bitmap = image;
+                            } catch(IOException e) {
+                                System.out.println(e);
+                            }
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageButton.setImageBitmap(category.bitmap);
+                                }
+                            });
+                        }
+                    });
                     imageButton.setPadding(5,5,5,5);
                     imageButton.setVisibility(imageButton.VISIBLE);
                     LinearLayout ll = (LinearLayout)findViewById(R.id.ll);
