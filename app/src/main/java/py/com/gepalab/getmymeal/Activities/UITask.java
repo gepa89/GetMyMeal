@@ -7,4 +7,5 @@ import py.com.gepalab.getmymeal.Domain.Category;
 public interface UITask {
 
     void processCategory(List<Category> categories);
+
 }

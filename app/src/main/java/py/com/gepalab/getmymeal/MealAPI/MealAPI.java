@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 import py.com.gepalab.getmymeal.Activities.MainActivity;
+import py.com.gepalab.getmymeal.Activities.UIMeal;
 import py.com.gepalab.getmymeal.Activities.UITask;
 import py.com.gepalab.getmymeal.Controller.AppController;
 import py.com.gepalab.getmymeal.Domain.Category;
@@ -43,12 +44,8 @@ public class MealAPI {
     final String CATEGORY_FILTER = "c";
     final String INGREDIENT_FILTER = "i";
     final String NAME_FILTER = "a";
-    private final String url;
+    public MealAPI() {
 
-
-
-    public MealAPI(String url) {
-        this.url = url;
     }
 
     /**
@@ -74,7 +71,8 @@ public class MealAPI {
                     category.strCategory = jsonObject.getString("strCategory");
                     category.strCategoryThumb = jsonObject.getString("strCategoryThumb");
 
-                    // TODO complete implementation
+                    category.strCategoryDescription = jsonObject.getString("strCategoryDescription");
+
                     ret.add(category);
 
                 }
@@ -92,45 +90,17 @@ public class MealAPI {
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
     }
 
-    /**
-     * Search all the meals given its Category name
-     *
-     * @param strCategory The Category name for the meal
-     *
-     * @return A List of {@link Meal} matching the criteria.
-     */
-    public final List<Meal> listMealForCategory(final String strCategory){
 
-        return listMealForParam(CATEGORY_FILTER, strCategory);
-    }
 
-    /**
-     * Search all the meals given its ingredient name
-     *
-     * @param ingredient The Ingredient name for the meal
-     *
-     * @return A List of {@link Meal} matching the criteria.
-     */
-    public final List<Meal> listMealForIngredient(final String ingredient){
 
-        return listMealForParam(INGREDIENT_FILTER, ingredient);
-    }
-
-    /**
-     * Search all the meals given its ingredient name
-     *
-     * @param name The common name for the meal
-     *
-     * @return A List of {@link Meal} matching the criteria.
-     */
-    public final List<Meal> listMealForName(final String name){
-        return listMealForParam(NAME_FILTER, name);
-    }
-
-    private List<Meal> listMealForParam(final String searchParam, final String param){
+    public void listMealForParam(final String searchParam, final String param, UIMeal uiMeal){
         final ArrayList<Meal> ret = new ArrayList<>();
-        String tag_string_req = "req_get_meal_cat";
-        StringRequest stReq = new StringRequest(Request.Method.GET, URL_GET_MEAL, response -> {
+        Log.e("search Param", searchParam);
+        Log.e("search ", param);
+        String tag_string_req = "req_get_meal_by_cat";
+        String uri = String.format(URL_GET_MEAL+"?"+searchParam+"=%1$s",
+                param);
+        StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
             try{
                 JSONObject jObj = new JSONObject(response);
                 JSONArray res =jObj.getJSONArray("meals");
@@ -139,23 +109,29 @@ public class MealAPI {
                     final JSONObject jsonObject = res.getJSONObject(i);
                     meal.idMeal = jsonObject.getString("idMeal");
                     meal.strMeal = jsonObject.getString("strMeal");
-                    meal.strMealThumb = jsonObject.getString("strMealThumb");
+                    meal.strMealThumb = jsonObject.getString("strMealThumb")+"/preview";
                     // TODO complete implementation
                     ret.add(meal);
                 }
+                uiMeal.processMeal(ret);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e("error", e.toString());
             }
         }, error -> Log.e("response", error.toString())){
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(searchParam, param);
                 return params;
             }
         };
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
-        return ret;
+
     }
+
+    public void listMealForCategory(UIMeal uiMeal, final String strCategory) {
+        listMealForParam(CATEGORY_FILTER, strCategory, uiMeal);
+    }
+
 }
 

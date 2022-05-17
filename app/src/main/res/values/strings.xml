@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GetMyMeal</string>
+    <string name="cat_sel_title">Select a Category</string>
 </resources>

@@ -6,6 +6,7 @@ public class Category{
     public String idCategory;
     public String strCategory;
     public String strCategoryThumb;
+    public String strCategoryImage;
     public String strCategoryDescription;
     public Bitmap bitmap;
 }
