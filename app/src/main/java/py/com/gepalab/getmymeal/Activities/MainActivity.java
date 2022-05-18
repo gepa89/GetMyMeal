@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -67,8 +68,6 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
         setContentView(R.layout.activity_main);
         MealAPI api = new MealAPI();
         loadCategories(api);
-
-
     }
 
     private void loadCategories(MealAPI api) {
@@ -142,51 +141,33 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
             @Override
             public void processMeal(List<Meal> meals) {
                 ArrayList<String> mealName = new ArrayList<>();
-                ArrayList<Bitmap> mealImages = new ArrayList<>();
+                ArrayList<String> mealImages = new ArrayList<>();
 
-                int cMeal = meals.toArray().length;
-                int cActMeal = 0;
                 for (Meal meal:meals) {
-
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                /***
-                                 * DO background tasks
-                                 */
-                                URL url = new URL(meal.strMealThumb);
-                                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                meal.bitmap = image;
-                                mealName.add(meal.strMeal);
-                                mealImages.add(meal.bitmap);
-                            } catch(IOException e) {
-                                System.out.println(e);
-                            }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    /***
-                                     * DO UI Operations
-                                     * Setting UP Vertical ListView
-                                     */
-
-                                    int totProc = mealName.toArray().length;
-                                    if(totProc == cMeal){
-                                        MyListAdapter listAdapter=new MyListAdapter(MainActivity.this, mealName, mealImages);
-                                        //Log.e("Meals", mealName.toString());
-                                        listAdapter.notifyDataSetChanged();
-                                        lvMeals.setAdapter(listAdapter);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    cActMeal++;
+                    mealName.add(meal.strMeal);
+                    mealImages.add(meal.strMealThumb);
                 }
+                MyListAdapter listAdapter=new MyListAdapter(MainActivity.this, mealName, mealImages);
+                //Log.e("Meals", mealName.toString());
+                listAdapter.notifyDataSetChanged();
+                lvMeals.setAdapter(listAdapter);
+                lvMeals.setOnItemClickListener( new AdapterView.OnItemClickListener(){
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Bundle mBundle = new Bundle();
+                                //Log.e("parent",parent.getAdapter().getItem(position).toString());
+                                String recipe = String.valueOf(parent.getItemAtPosition(position));
+
+                                mBundle.putString("recipe", recipe);
+                                Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                                intent.putExtras(mBundle);
+                                startActivity(intent);
+                            }
+                        });
+
             }
         }, adapter.getItem(position));
     }
+
 }

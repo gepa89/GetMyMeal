@@ -27,6 +27,7 @@ import java.util.function.Function;
 
 import py.com.gepalab.getmymeal.Activities.MainActivity;
 import py.com.gepalab.getmymeal.Activities.UIMeal;
+import py.com.gepalab.getmymeal.Activities.UIRecipe;
 import py.com.gepalab.getmymeal.Activities.UITask;
 import py.com.gepalab.getmymeal.Controller.AppController;
 import py.com.gepalab.getmymeal.Domain.Category;
@@ -131,6 +132,9 @@ public class MealAPI {
 
     public void listMealForCategory(UIMeal uiMeal, final String strCategory) {
         listMealForParam(CATEGORY_FILTER, strCategory, uiMeal);
+    }
+    public void listRecipeByName(UIRecipe uiRecipe, final String strRecipe) {
+        listMealForParam(CATEGORY_FILTER, strRecipe, uiRecipe);
     }
 
 }
