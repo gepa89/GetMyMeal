@@ -135,12 +135,14 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
         //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
         MealAPI api = new MealAPI();
         api.listMealForCategory(meals -> {
+            ArrayList<String> mealID = new ArrayList<>();
             ArrayList<String> mealName = new ArrayList<>();
             ArrayList<String> mealImages = new ArrayList<>();
             ArrayList<String> mealImagesView = new ArrayList<>();
 
 
             for (Meal meal : meals) {
+                mealID.add(meal.idMeal);
                 mealName.add(meal.strMeal);
                 mealImages.add(meal.strMealThumb);
                 mealImagesView.add(meal.strMealImage);
@@ -157,8 +159,11 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
                     //Log.e("parent",parent.getAdapter().getItem(position).toString());
                     String recipe = String.valueOf(parent.getItemAtPosition(position1));
                     String imgUri = mealImagesView.get(position1);
+                    String mealid = mealID.get(position1);
+
                     mBundle.putString("recipe", recipe);
                     mBundle.putString("recThumb", imgUri);
+                    mBundle.putString("recipeID", mealid);
                     //Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
                     intent.putExtras(mBundle);

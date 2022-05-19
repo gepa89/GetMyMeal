@@ -9,12 +9,14 @@ import py.com.gepalab.getmymeal.Fragments.CardFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     private static final int CARD_ITEM_SIZE = 3;
-    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    private String paramIn = "";
+    public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, String param) {
         super(fragmentActivity);
+        paramIn = param;
     }
 
     @NonNull @Override public Fragment createFragment(int position) {
-        return CardFragment.newInstance(position);
+        return CardFragment.newInstance(position, paramIn);
     }
 
     @Override public int getItemCount() {

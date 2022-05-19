@@ -38,6 +38,8 @@ public class RecipeActivity extends AppCompatActivity {
         Bundle mBundle = getIntent().getExtras();
         String actTitle = mBundle.getString("recipe");
         String recThumb = mBundle.getString("recThumb");
+        String recipeID = mBundle.getString("recipeID");
+
 
         tvMealTitle = findViewById(R.id.tvMealTitle);
         vpContainer = findViewById(R.id.vpContainer);
@@ -70,7 +72,7 @@ public class RecipeActivity extends AppCompatActivity {
         });
 
         tvMealTitle.setText(actTitle);
-        vpContainer.setAdapter(createCardAdapter());
+        vpContainer.setAdapter(createCardAdapter(recipeID));
         new TabLayoutMediator(tlContentList, vpContainer,
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
@@ -84,8 +86,8 @@ public class RecipeActivity extends AppCompatActivity {
                     }
                 }).attach();
     }
-    private ViewPagerAdapter createCardAdapter() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+    private ViewPagerAdapter createCardAdapter(final String param) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this,param);
         return adapter;
     }
 }

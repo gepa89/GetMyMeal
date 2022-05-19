@@ -37,13 +37,14 @@ import py.com.gepalab.getmymeal.Domain.Recipe;
 import static py.com.gepalab.getmymeal.Data.AppConfig.URL_GET_MEAL_CAT;
 import static py.com.gepalab.getmymeal.Data.AppConfig.URL_GET_MEAL;
 import static py.com.gepalab.getmymeal.Data.AppConfig.URL_SEARCH_MEAL;
-
+import static py.com.gepalab.getmymeal.Data.AppConfig.URL_LOOKUP_MEAL;
 
 /**
  * The Meal API wrapper
  *
  */
 public class MealAPI {
+    final String ID_SEARCH = "i";
     final String CATEGORY_FILTER = "c";
     final String INGREDIENT_FILTER = "i";
     final String NAME_FILTER = "a";
@@ -175,11 +176,47 @@ public class MealAPI {
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
 
     }
+    public void listRecipeForID(final String searchParam, final String param, UIRecipe uiRecipe){
+        final ArrayList<Recipe> ret = new ArrayList<>();
+        Log.e("search Param", searchParam);
+        Log.e("search ", param);
+        String tag_string_req = "req_get_meal_by_id";
+        String uri = String.format(URL_LOOKUP_MEAL+"?"+searchParam+"=%1$s",
+                param);
+        StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
+            try{
+                JSONObject jObj = new JSONObject(response);
+                JSONArray res =jObj.getJSONArray("meals");
+                for(int i = 0; i < res.length(); i++){
+                    final Recipe recipe = new Recipe();
+                    final JSONObject jsonObject = res.getJSONObject(i);
+                    recipe.idMeal = jsonObject.getString("idMeal");
+                    recipe.strMeal = jsonObject.getString("strMeal");
+                    recipe.strCategory = jsonObject.getString("strCategory");
+                    recipe.strInstructions = jsonObject.getString("strInstructions");
+                    // TODO complete implementation
+                    ret.add(recipe);
+                }
+                uiRecipe.processRecipe(ret);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("error", e.toString());
+            }
+        }, error -> Log.e("response", error.toString())){
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
+
+    }
     public void listMealForCategory(UIMeal uiMeal, final String strCategory) {
         listMealForParam(CATEGORY_FILTER, strCategory, uiMeal);
     }
-    public void listRecipeByName(UIRecipe uiRecipe, final String strRecipe) {
-        listRecipeForParam(NAME_SEARCH, strRecipe, uiRecipe);
+    public void getRecipeByID(UIRecipe uiRecipe, final String strRecipe) {
+        listRecipeForID(ID_SEARCH, strRecipe, uiRecipe);
     }
 
     public void searchMeal(UIMeal uiMeal, final String strQuery, final String param) {
