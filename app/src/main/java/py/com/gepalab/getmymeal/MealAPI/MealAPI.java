@@ -32,9 +32,11 @@ import py.com.gepalab.getmymeal.Activities.UITask;
 import py.com.gepalab.getmymeal.Controller.AppController;
 import py.com.gepalab.getmymeal.Domain.Category;
 import py.com.gepalab.getmymeal.Domain.Meal;
+import py.com.gepalab.getmymeal.Domain.Recipe;
 
 import static py.com.gepalab.getmymeal.Data.AppConfig.URL_GET_MEAL_CAT;
 import static py.com.gepalab.getmymeal.Data.AppConfig.URL_GET_MEAL;
+import static py.com.gepalab.getmymeal.Data.AppConfig.URL_SEARCH_MEAL;
 
 
 /**
@@ -45,6 +47,7 @@ public class MealAPI {
     final String CATEGORY_FILTER = "c";
     final String INGREDIENT_FILTER = "i";
     final String NAME_FILTER = "a";
+    final String NAME_SEARCH = "S";
     public MealAPI() {
 
     }
@@ -98,23 +101,66 @@ public class MealAPI {
         final ArrayList<Meal> ret = new ArrayList<>();
         Log.e("search Param", searchParam);
         Log.e("search ", param);
-        String tag_string_req = "req_get_meal_by_cat";
+        String tag_string_req = "req_get_meal_by_param";
         String uri = String.format(URL_GET_MEAL+"?"+searchParam+"=%1$s",
+                param);
+        Log.e("search uri", uri);
+        StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
+            Log.e("response raw",response);
+            try{
+                JSONObject jObj = new JSONObject(response);
+                if(jObj.has("meals")){
+                    if(jObj.get("meals") != null){
+                        JSONArray res =jObj.getJSONArray("meals");
+                        for(int i = 0; i < res.length(); i++){
+                            final Meal meal = new Meal();
+                            final JSONObject jsonObject = res.getJSONObject(i);
+                            meal.idMeal = jsonObject.getString("idMeal");
+                            meal.strMeal = jsonObject.getString("strMeal");
+                            meal.strMealImage = jsonObject.getString("strMealThumb");
+                            meal.strMealThumb = jsonObject.getString("strMealThumb")+"/preview";
+                            // TODO complete implementation
+                            ret.add(meal);
+                        }
+                        uiMeal.processMeal(ret);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+                uiMeal.processMeal(null);
+                Log.e("error in query", e.toString());
+            }
+        }, error -> Log.e("response", error.toString())){
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
+
+    }
+    public void listRecipeForParam(final String searchParam, final String param, UIRecipe uiRecipe){
+        final ArrayList<Recipe> ret = new ArrayList<>();
+        Log.e("search Param", searchParam);
+        Log.e("search ", param);
+        String tag_string_req = "req_get_meal_by_name";
+        String uri = String.format(URL_SEARCH_MEAL+"?"+searchParam+"=%1$s",
                 param);
         StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
             try{
                 JSONObject jObj = new JSONObject(response);
                 JSONArray res =jObj.getJSONArray("meals");
                 for(int i = 0; i < res.length(); i++){
-                    final Meal meal = new Meal();
+                    final Recipe recipe = new Recipe();
                     final JSONObject jsonObject = res.getJSONObject(i);
-                    meal.idMeal = jsonObject.getString("idMeal");
-                    meal.strMeal = jsonObject.getString("strMeal");
-                    meal.strMealThumb = jsonObject.getString("strMealThumb")+"/preview";
+                    recipe.idMeal = jsonObject.getString("idMeal");
+                    recipe.strMeal = jsonObject.getString("strMeal");
                     // TODO complete implementation
-                    ret.add(meal);
+                    ret.add(recipe);
                 }
-                uiMeal.processMeal(ret);
+                uiRecipe.processRecipe(ret);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("error", e.toString());
@@ -129,13 +175,21 @@ public class MealAPI {
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
 
     }
-
     public void listMealForCategory(UIMeal uiMeal, final String strCategory) {
         listMealForParam(CATEGORY_FILTER, strCategory, uiMeal);
     }
     public void listRecipeByName(UIRecipe uiRecipe, final String strRecipe) {
-        listMealForParam(CATEGORY_FILTER, strRecipe, uiRecipe);
+        listRecipeForParam(NAME_SEARCH, strRecipe, uiRecipe);
     }
 
+    public void searchMeal(UIMeal uiMeal, final String strQuery, final String param) {
+        if(param.equals("cat")){
+            listMealForParam(CATEGORY_FILTER, strQuery, uiMeal);
+        }else if (param.equals("nam")){
+            listMealForParam(NAME_FILTER, strQuery, uiMeal);
+        }else if (param.equals("ing")){
+            listMealForParam(INGREDIENT_FILTER, strQuery, uiMeal);
+        }
+    }
 }
 

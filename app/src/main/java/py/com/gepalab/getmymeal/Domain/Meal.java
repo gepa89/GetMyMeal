@@ -7,4 +7,5 @@ public class Meal {
     public String strMealThumb;
     public String idMeal;
     public Bitmap bitmap;
+    public String strMealImage;
 }

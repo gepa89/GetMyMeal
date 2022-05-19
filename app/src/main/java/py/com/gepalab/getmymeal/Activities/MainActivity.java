@@ -1,10 +1,13 @@
 package py.com.gepalab.getmymeal.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(":::::::", "onCreate");
+        //Log.e(":::::::", "onCreate");
         setContentView(R.layout.activity_main);
         MealAPI api = new MealAPI();
         loadCategories(api);
@@ -72,50 +75,41 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
 
     private void loadCategories(MealAPI api) {
         Log.e(":::::::", "Cargue sus categorias");
-        api.listCategory(new UITask() {
-            @Override
-            public void processCategory(List<Category> categories) {
-                ArrayList<String> categoryName = new ArrayList<>();;
-                ArrayList<Bitmap> categoryImages = new ArrayList<>();;
-                for (Category category:categories) {
-                    Log.e(":::::::", "Estoy de star");
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Handler handler = new Handler(Looper.getMainLooper());
+        api.listCategory(categories -> {
+            ArrayList<String> categoryName = new ArrayList<>();;
+            ArrayList<Bitmap> categoryImages = new ArrayList<>();;
+            for (Category category:categories) {
+                Log.e(":::::::", "Estoy de star");
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                /***
-                                 * DO background tasks
-                                 */
-                                URL url = new URL(category.strCategoryThumb);
-                                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                category.bitmap = image;
-                                categoryName.add(category.strCategory);
-                                categoryImages.add(category.bitmap);
-                            } catch(IOException e) {
-                                System.out.println(e);
-                            }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    /***
-                                     * DO UI Operations
-                                     * Setting up horizontal RecyclerView
-                                     */
-                                    // set up the RecyclerView
-                                    RecyclerView recyclerView = findViewById(R.id.rv_categories);
-                                    LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                                    recyclerView.setLayoutManager(horizontalLayoutManager);
-                                    adapter = new MyRecyclerViewAdapter(MainActivity.this, categoryImages, categoryName);
-                                    adapter.setClickListener(MainActivity.this);
-                                    recyclerView.setAdapter(adapter);
-                                }
-                            });
-                        }
+                executor.execute(() -> {
+                    try {
+                        /***
+                         * DO background tasks
+                         */
+                        URL url = new URL(category.strCategoryThumb);
+                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        category.bitmap = image;
+                        categoryName.add(category.strCategory);
+                        categoryImages.add(category.bitmap);
+                    } catch(IOException e) {
+                        System.out.println(e);
+                    }
+                    handler.post(() -> {
+                        /***
+                         * DO UI Operations
+                         * Setting up horizontal RecyclerView
+                         */
+                        // set up the RecyclerView
+                        RecyclerView recyclerView = findViewById(R.id.rv_categories);
+                        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                        recyclerView.setLayoutManager(horizontalLayoutManager);
+                        adapter = new MyRecyclerViewAdapter(MainActivity.this, categoryImages, categoryName);
+                        adapter.setClickListener(MainActivity.this);
+                        recyclerView.setAdapter(adapter);
                     });
-                }
+                });
             }
         });
 
@@ -125,8 +119,11 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-
-        return super.onCreateOptionsMenu(menu);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(MainActivity.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(getApplicationContext(), SearchResultsActivity.class)));
+        searchView.setSubmitButtonEnabled(true);
+        return true;
     }
 
     @Override
@@ -137,36 +134,39 @@ public class MainActivity extends AppCompatActivity  implements MyRecyclerViewAd
 
         //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
         MealAPI api = new MealAPI();
-        api.listMealForCategory(new UIMeal() {
-            @Override
-            public void processMeal(List<Meal> meals) {
-                ArrayList<String> mealName = new ArrayList<>();
-                ArrayList<String> mealImages = new ArrayList<>();
+        api.listMealForCategory(meals -> {
+            ArrayList<String> mealName = new ArrayList<>();
+            ArrayList<String> mealImages = new ArrayList<>();
+            ArrayList<String> mealImagesView = new ArrayList<>();
 
-                for (Meal meal:meals) {
-                    mealName.add(meal.strMeal);
-                    mealImages.add(meal.strMealThumb);
-                }
-                MyListAdapter listAdapter=new MyListAdapter(MainActivity.this, mealName, mealImages);
-                //Log.e("Meals", mealName.toString());
-                listAdapter.notifyDataSetChanged();
-                lvMeals.setAdapter(listAdapter);
-                lvMeals.setOnItemClickListener( new AdapterView.OnItemClickListener(){
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Bundle mBundle = new Bundle();
-                                //Log.e("parent",parent.getAdapter().getItem(position).toString());
-                                String recipe = String.valueOf(parent.getItemAtPosition(position));
 
-                                mBundle.putString("recipe", recipe);
-                                Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                                intent.putExtras(mBundle);
-                                startActivity(intent);
-                            }
-                        });
+            for (Meal meal : meals) {
+                mealName.add(meal.strMeal);
+                mealImages.add(meal.strMealThumb);
+                mealImagesView.add(meal.strMealImage);
 
             }
+            MyListAdapter listAdapter = new MyListAdapter(MainActivity.this, mealName, mealImages);
+            //Log.e("Meals", mealName.toString());
+            listAdapter.notifyDataSetChanged();
+            lvMeals.setAdapter(listAdapter);
+            lvMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view1, int position1, long id) {
+                    Bundle mBundle = new Bundle();
+                    //Log.e("parent",parent.getAdapter().getItem(position).toString());
+                    String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                    String imgUri = mealImagesView.get(position1);
+                    mBundle.putString("recipe", recipe);
+                    mBundle.putString("recThumb", imgUri);
+                    //Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+
+                }
+            });
+
         }, adapter.getItem(position));
     }
 

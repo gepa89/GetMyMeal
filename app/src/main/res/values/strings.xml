@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">GetMyMeal</string>
     <string name="cat_sel_title">Select a Category</string>
+    <string name="re_act_tab1">Description</string>
+    <string name="re_act_tab2">Ingredients</string>
+    <string name="re_act_tab3">Measures</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_hint">Search</string>
+    <string name="search_label">Search</string>
 </resources>
