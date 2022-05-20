@@ -71,8 +71,6 @@ public class SearchResultsActivity extends Activity {
                             mBundle.putString("recipe", recipe);
                             mBundle.putString("recThumb", imgUri);
                             mBundle.putString("recID", mealID);
-                            mealNameGlo.remove("No Results");
-                            mealImagesGlo.remove("");
                             Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
                             intent1.putExtras(mBundle);
                             startActivity(intent1);
@@ -157,6 +155,8 @@ public class SearchResultsActivity extends Activity {
                             mealImagesGlo.add(meal.getStrMealThumb());
                             mealImagesViewGlo.add(meal.getStrMealImage());
                             mealIDGlo.add(meal.getIdMeal());
+                            mealNameGlo.remove("No Results");
+                            mealImagesGlo.remove("");
                         }
                     }
                     MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
