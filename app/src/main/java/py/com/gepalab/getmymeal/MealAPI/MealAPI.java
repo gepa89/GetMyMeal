@@ -100,14 +100,23 @@ public class MealAPI {
                     jObj.get("meals");
                     JSONArray res =jObj.getJSONArray("meals");
                     for(int i = 0; i < res.length(); i++){
-                        final Meal meal = new Meal();
                         final JSONObject jsonObject = res.getJSONObject(i);
+                        final Meal meal = new Meal();
                         meal.setIdMeal( jsonObject.getString("idMeal"));
                         meal.setStrMeal( jsonObject.getString("strMeal"));
                         meal.setStrMealImage(jsonObject.getString("strMealThumb"));
                         meal.setStrMealThumb(jsonObject.getString("strMealThumb"));
                         ret.add(meal);
                     }
+
+                    uiMeal.processMeal(ret);
+                }else{
+                    final Meal meal = new Meal();
+                    meal.setIdMeal( "");
+                    meal.setStrMeal( "No Results");
+                    meal.setStrMealImage("");
+                    meal.setStrMealThumb("");
+                    ret.add(meal);
                     uiMeal.processMeal(ret);
                 }
             } catch (JSONException e) {
