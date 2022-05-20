@@ -38,7 +38,7 @@ public class RecipeActivity extends AppCompatActivity {
         Bundle mBundle = getIntent().getExtras();
         String actTitle = mBundle.getString("recipe");
         String recThumb = mBundle.getString("recThumb");
-        String recipeID = mBundle.getString("recipeID");
+        String recipeID = mBundle.getString("recID");
 
 
         tvMealTitle = findViewById(R.id.tvMealTitle);

@@ -1,31 +1,18 @@
 package py.com.gepalab.getmymeal.MealAPI;
 
-import android.app.Activity;
-import android.content.pm.LabeledIntent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
-import py.com.gepalab.getmymeal.Activities.MainActivity;
 import py.com.gepalab.getmymeal.Activities.UIMeal;
 import py.com.gepalab.getmymeal.Activities.UIRecipe;
 import py.com.gepalab.getmymeal.Activities.UITask;
@@ -131,41 +118,9 @@ public class MealAPI {
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
 
     }
-    public void listRecipeForParam(final String searchParam, final String param, UIRecipe uiRecipe){
-        final ArrayList<Recipe> ret = new ArrayList<>();
-        Log.e("search Param", searchParam);
-        Log.e("search ", param);
-        String tag_string_req = "req_get_meal_by_name";
-        String uri = String.format(URL_SEARCH_MEAL+"?"+searchParam+"=%1$s",
-                param);
-        StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
-            try{
-                JSONObject jObj = new JSONObject(response);
-                JSONArray res =jObj.getJSONArray("meals");
-                for(int i = 0; i < res.length(); i++){
-                    final Recipe recipe = new Recipe();
-                    final JSONObject jsonObject = res.getJSONObject(i);
-                    recipe.setIdMeal(jsonObject.getString("idMeal"));
-                    recipe.setStrMeal(jsonObject.getString("strMeal"));
-                    ret.add(recipe);
-                }
-                uiRecipe.processRecipes(ret);
-            } catch (JSONException e) {
-                Log.e("MealAPI", e.getMessage());
-            }
-        }, error -> Log.e("response", error.toString())){
-            @Override
-            protected Map<String, String> getParams(){
-                return new HashMap<>();
-            }
-        };
-        AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
 
-    }
     public void listRecipeForID(final String searchParam, final String param, UIRecipe uiRecipe){
         final ArrayList<Recipe> ret = new ArrayList<>();
-        Log.e("search Param", searchParam);
-        Log.e("search ", param);
         String tag_string_req = "req_get_meal_by_id";
         String uri = String.format(URL_LOOKUP_MEAL+"?"+searchParam+"=%1$s",
                 param);
@@ -227,12 +182,16 @@ public class MealAPI {
     }
 
     public void searchMeal(UIMeal uiMeal, final String strQuery, final String param) {
-        if(param.equals("cat")){
-            listMealForParam(CATEGORY_FILTER, strQuery, uiMeal);
-        }else if (param.equals("nam")){
-            listMealForParam(NAME_FILTER, strQuery, uiMeal);
-        }else if (param.equals("ing")){
-            listMealForParam(INGREDIENT_FILTER, strQuery, uiMeal);
+        switch (param) {
+            case "cat":
+                listMealForParam(CATEGORY_FILTER, strQuery, uiMeal);
+                break;
+            case "nam":
+                listMealForParam(NAME_FILTER, strQuery, uiMeal);
+                break;
+            case "ing":
+                listMealForParam(INGREDIENT_FILTER, strQuery, uiMeal);
+                break;
         }
     }
 }

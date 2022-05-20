@@ -52,28 +52,12 @@ public class Recipe {
     private String strMeasure20;
     private String strSource;
 
-    public String getIdMeal() {
-        return idMeal;
-    }
-
     public void setIdMeal(String idMeal) {
         this.idMeal = idMeal;
     }
 
-    public String getStrMeal() {
-        return strMeal;
-    }
-
     public void setStrMeal(String strMeal) {
         this.strMeal = strMeal;
-    }
-
-    public String getStrDrinkAlternate() {
-        return strDrinkAlternate;
-    }
-
-    public void setStrDrinkAlternate(String strDrinkAlternate) {
-        this.strDrinkAlternate = strDrinkAlternate;
     }
 
     public String getStrCategory() {
@@ -98,30 +82,6 @@ public class Recipe {
 
     public void setStrInstructions(String strInstructions) {
         this.strInstructions = strInstructions;
-    }
-
-    public String getStrMealThumb() {
-        return strMealThumb;
-    }
-
-    public void setStrMealThumb(String strMealThumb) {
-        this.strMealThumb = strMealThumb;
-    }
-
-    public String getStrTags() {
-        return strTags;
-    }
-
-    public void setStrTags(String strTags) {
-        this.strTags = strTags;
-    }
-
-    public String getStrYoutube() {
-        return strYoutube;
-    }
-
-    public void setStrYoutube(String strYoutube) {
-        this.strYoutube = strYoutube;
     }
 
     public String getStrIngredient1() {
@@ -196,94 +156,6 @@ public class Recipe {
         this.strIngredient9 = strIngredient9;
     }
 
-    public String getStrIngredient10() {
-        return strIngredient10;
-    }
-
-    public void setStrIngredient10(String strIngredient10) {
-        this.strIngredient10 = strIngredient10;
-    }
-
-    public String getStrIngredient11() {
-        return strIngredient11;
-    }
-
-    public void setStrIngredient11(String strIngredient11) {
-        this.strIngredient11 = strIngredient11;
-    }
-
-    public String getStrIngredient12() {
-        return strIngredient12;
-    }
-
-    public void setStrIngredient12(String strIngredient12) {
-        this.strIngredient12 = strIngredient12;
-    }
-
-    public String getStrIngredient13() {
-        return strIngredient13;
-    }
-
-    public void setStrIngredient13(String strIngredient13) {
-        this.strIngredient13 = strIngredient13;
-    }
-
-    public String getStrIngredient14() {
-        return strIngredient14;
-    }
-
-    public void setStrIngredient14(String strIngredient14) {
-        this.strIngredient14 = strIngredient14;
-    }
-
-    public String getStrIngredient15() {
-        return strIngredient15;
-    }
-
-    public void setStrIngredient15(String strIngredient15) {
-        this.strIngredient15 = strIngredient15;
-    }
-
-    public String getStrIngredient16() {
-        return strIngredient16;
-    }
-
-    public void setStrIngredient16(String strIngredient16) {
-        this.strIngredient16 = strIngredient16;
-    }
-
-    public String getStrIngredient17() {
-        return strIngredient17;
-    }
-
-    public void setStrIngredient17(String strIngredient17) {
-        this.strIngredient17 = strIngredient17;
-    }
-
-    public String getStrIngredient18() {
-        return strIngredient18;
-    }
-
-    public void setStrIngredient18(String strIngredient18) {
-        this.strIngredient18 = strIngredient18;
-    }
-
-    public String getStrIngredient19() {
-        return strIngredient19;
-    }
-
-    public void setStrIngredient19(String strIngredient19) {
-        this.strIngredient19 = strIngredient19;
-    }
-
-    public String getStrIngredient20() {
-        return strIngredient20;
-    }
-
-    public void setStrIngredient20(String strIngredient20) {
-        this.strIngredient20 = strIngredient20;
-    }
-
     public String getStrMeasure1() {
         return strMeasure1;
     }
@@ -356,99 +228,4 @@ public class Recipe {
         this.strMeasure9 = strMeasure9;
     }
 
-    public String getStrMeasure10() {
-        return strMeasure10;
-    }
-
-    public void setStrMeasure10(String strMeasure10) {
-        this.strMeasure10 = strMeasure10;
-    }
-
-    public String getStrMeasure11() {
-        return strMeasure11;
-    }
-
-    public void setStrMeasure11(String strMeasure11) {
-        this.strMeasure11 = strMeasure11;
-    }
-
-    public String getStrMeasure12() {
-        return strMeasure12;
-    }
-
-    public void setStrMeasure12(String strMeasure12) {
-        this.strMeasure12 = strMeasure12;
-    }
-
-    public String getStrMeasure13() {
-        return strMeasure13;
-    }
-
-    public void setStrMeasure13(String strMeasure13) {
-        this.strMeasure13 = strMeasure13;
-    }
-
-    public String getStrMeasure14() {
-        return strMeasure14;
-    }
-
-    public void setStrMeasure14(String strMeasure14) {
-        this.strMeasure14 = strMeasure14;
-    }
-
-    public String getStrMeasure15() {
-        return strMeasure15;
-    }
-
-    public void setStrMeasure15(String strMeasure15) {
-        this.strMeasure15 = strMeasure15;
-    }
-
-    public String getStrMeasure16() {
-        return strMeasure16;
-    }
-
-    public void setStrMeasure16(String strMeasure16) {
-        this.strMeasure16 = strMeasure16;
-    }
-
-    public String getStrMeasure17() {
-        return strMeasure17;
-    }
-
-    public void setStrMeasure17(String strMeasure17) {
-        this.strMeasure17 = strMeasure17;
-    }
-
-    public String getStrMeasure18() {
-        return strMeasure18;
-    }
-
-    public void setStrMeasure18(String strMeasure18) {
-        this.strMeasure18 = strMeasure18;
-    }
-
-    public String getStrMeasure19() {
-        return strMeasure19;
-    }
-
-    public void setStrMeasure19(String strMeasure19) {
-        this.strMeasure19 = strMeasure19;
-    }
-
-    public String getStrMeasure20() {
-        return strMeasure20;
-    }
-
-    public void setStrMeasure20(String strMeasure20) {
-        this.strMeasure20 = strMeasure20;
-    }
-
-    public String getStrSource() {
-        return strSource;
-    }
-
-    public void setStrSource(String strSource) {
-        this.strSource = strSource;
-    }
 }

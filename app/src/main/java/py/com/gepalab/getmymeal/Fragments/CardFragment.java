@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -95,6 +94,7 @@ public class CardFragment extends Fragment {
         api.getRecipeByID(new UIRecipe() {
             @Override
             public void processRecipes(List<Recipe> recipes) {
+                //noinspection MismatchedQueryAndUpdateOfCollection
                 List<String> recipeDescription = new ArrayList<>();
                 for(Recipe recipe:recipes){
                     recipeDescription.add(recipe.getStrInstructions());
@@ -125,10 +125,6 @@ public class CardFragment extends Fragment {
                 }
             }
 
-            @Override
-            public void processSingleRecipe(Recipe recipe) {
-                
-            }
         }, paramEntered);
     }
 }

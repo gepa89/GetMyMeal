@@ -1,12 +1,11 @@
 package py.com.gepalab.getmymeal.Domain;
 
-import android.graphics.Bitmap;
+
 
 public class Meal {
     private String strMeal;
     private String strMealThumb;
     private String idMeal;
-    private Bitmap bitmap;
     private String strMealImage;
 
     public String getStrMeal() {
@@ -33,13 +32,6 @@ public class Meal {
         this.idMeal = idMeal;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
 
     public String getStrMealImage() {
         return strMealImage;

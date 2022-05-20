@@ -6,6 +6,6 @@ import py.com.gepalab.getmymeal.Domain.Recipe;
 
 public interface UIRecipe {
 
-    void processRecipe(List<Recipe> recipes);
+    void processRecipes(List<Recipe> recipes);
 
 }

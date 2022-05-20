@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import py.com.gepalab.getmymeal.MealAPI.MealAPI;
 import py.com.gepalab.getmymeal.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
@@ -55,8 +54,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView myView;
-        TextView myTextView;
+        final ImageView myView;
+        final TextView myTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -67,7 +66,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getBindingAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(getBindingAdapterPosition());
         }
     }
 
@@ -83,7 +82,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
 
     }
 }

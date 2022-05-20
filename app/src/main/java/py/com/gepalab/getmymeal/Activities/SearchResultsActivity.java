@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,42 +39,61 @@ public class SearchResultsActivity extends Activity {
             Log.i("search query", query);
             //use the query to search your data somehow
             MealAPI api = new MealAPI();
+            List<Meal> mergedArr = new ArrayList<>();
+            List<String> mealNameGlo = new ArrayList<>();
+            List<String> mealImagesGlo = new ArrayList<>();
+            List<String> mealImagesViewGlo = new ArrayList<>();
+            List<String> mealIDGlo = new ArrayList<>();
+
             api.searchMeal((UIMeal) meals -> {
-                List<String> mealName = new ArrayList<>();
-                List<String> mealImages = new ArrayList<>();
-                List<String> mealImagesView = new ArrayList<>();
                 if(meals != null  && !meals.isEmpty()){
                     for (Meal meal : meals) {
-                        mealName.add(meal.getStrMeal());
-                        mealImages.add(meal.getStrMealThumb());
-                        mealImagesView.add(meal.getStrMealImage());
+                        aggregateMeals(mergedArr, meal);
                     }
-                    MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealName, mealImages);
-                    //Log.e("Meals", mealName.toString());
-                    listAdapter.notifyDataSetChanged();
-                    lvSearchResult.setAdapter(listAdapter);
-
-                    lvSearchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view1, int position1, long id) {
-                            Bundle mBundle = new Bundle();
-                            //Log.e("parent",parent.getAdapter().getItem(position).toString());
-                            String recipe = String.valueOf(parent.getItemAtPosition(position1));
-                            String imgUri = mealImagesView.get(position1);
-                            mBundle.putString("recipe", recipe);
-                            mBundle.putString("recThumb", imgUri);
-                            //Toast.makeText(SearchResultsActivity.this, recipe, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(SearchResultsActivity.this, RecipeActivity.class);
-                            intent.putExtras(mBundle);
-                            startActivity(intent);
-                        }
-                    });
-                }else{
-                    Toast.makeText(SearchResultsActivity.this, "No Results", Toast.LENGTH_LONG).show();
-                    finish();
                 }
-
             }, query, "ing");
+            api.searchMeal((UIMeal) meals -> {
+                if(meals != null  && !meals.isEmpty()){
+                    for (Meal meal : meals) {
+                        aggregateMeals(mergedArr, meal);
+                    }
+                }
+            }, query, "cat");
+            api.searchMeal((UIMeal) meals -> {
+                if(meals != null  && !meals.isEmpty()){
+                    for (Meal meal : meals) {
+                        aggregateMeals(mergedArr, meal);
+                    }
+                }
+            }, query, "nam");
+            for (Meal meal:mergedArr){
+                mealNameGlo.add(meal.getStrMeal());
+                mealImagesGlo.add(meal.getStrMealThumb());
+                mealImagesViewGlo.add(meal.getStrMealImage());
+                mealIDGlo.add(meal.getIdMeal());
+            }
+            MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
+
+            listAdapter.notifyDataSetChanged();
+            lvSearchResult.setAdapter(listAdapter);
+
+            lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
+                Bundle mBundle = new Bundle();
+                String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                String imgUri = mealImagesViewGlo.get(position1);
+                String mealID = mealIDGlo.get(position1);
+                mBundle.putString("recipe", recipe);
+                mBundle.putString("recThumb", imgUri);
+                mBundle.putString("recID", mealID);
+                //Toast.makeText(SearchResultsActivity.this, recipe, Toast.LENGTH_LONG).show();
+                Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
+                intent1.putExtras(mBundle);
+                startActivity(intent1);
+            });
         }
+    }
+
+    public synchronized void aggregateMeals(List<Meal> merged, Meal meals) {
+            merged.add(meals);
     }
 }

@@ -26,12 +26,11 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/cat_sel_title"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_categories"
@@ -55,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <ListView
                 android:id="@+id/lvMeals"

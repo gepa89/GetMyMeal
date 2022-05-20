@@ -50,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private void loadCategories(MealAPI api) {
         api.listCategory(categories -> {
             ArrayList<String> categoryName = new ArrayList<>();
-            ;
             ArrayList<Bitmap> categoryImages = new ArrayList<>();
-            ;
             for (Category category : categories) {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(int position) {
         TextView tvCatTitle = findViewById(R.id.tvCatTitle);
         tvCatTitle.setText(adapter.getItem(position));
         lvMeals = findViewById(R.id.lvMeals);
@@ -125,24 +123,21 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             //Log.e("Meals", mealName.toString());
             listAdapter.notifyDataSetChanged();
             lvMeals.setAdapter(listAdapter);
-            lvMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view1, int position1, long id) {
-                    Bundle mBundle = new Bundle();
-                    //Log.e("parent",parent.getAdapter().getItem(position).toString());
-                    String recipe = String.valueOf(parent.getItemAtPosition(position1));
-                    String imgUri = mealImagesView.get(position1);
-                    String mealid = mealID.get(position1);
+            lvMeals.setOnItemClickListener((parent, view1, position1, id) -> {
+                Bundle mBundle = new Bundle();
+                //Log.e("parent",parent.getAdapter().getItem(position).toString());
+                String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                String imgUri = mealImagesView.get(position1);
+                String mealid = mealID.get(position1);
 
-                    mBundle.putString("recipe", recipe);
-                    mBundle.putString("recThumb", imgUri);
-                    mBundle.putString("recipeID", mealid);
-                    //Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
+                mBundle.putString("recipe", recipe);
+                mBundle.putString("recThumb", imgUri);
+                mBundle.putString("recID", mealid);
+                //Toast.makeText(MainActivity.this, recipe, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                intent.putExtras(mBundle);
+                startActivity(intent);
 
-                }
             });
 
         }, adapter.getItem(position));

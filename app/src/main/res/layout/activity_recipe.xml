@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="259dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/tvMealTitle"

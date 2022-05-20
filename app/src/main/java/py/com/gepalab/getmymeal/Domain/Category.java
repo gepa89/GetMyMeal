@@ -10,10 +10,6 @@ public class Category{
     private String strCategoryDescription;
     private Bitmap bitmap;
 
-    public String getIdCategory() {
-        return idCategory;
-    }
-
     public void setIdCategory(String idCategory) {
         this.idCategory = idCategory;
     }
@@ -32,18 +28,6 @@ public class Category{
 
     public void setStrCategoryThumb(String strCategoryThumb) {
         this.strCategoryThumb = strCategoryThumb;
-    }
-
-    public String getStrCategoryImage() {
-        return strCategoryImage;
-    }
-
-    public void setStrCategoryImage(String strCategoryImage) {
-        this.strCategoryImage = strCategoryImage;
-    }
-
-    public String getStrCategoryDescription() {
-        return strCategoryDescription;
     }
 
     public void setStrCategoryDescription(String strCategoryDescription) {
