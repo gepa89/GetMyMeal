@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import py.com.gepalab.getmymeal.Fragments.CardFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
-    private static final int CARD_ITEM_SIZE = 3;
+    private static final int CARD_ITEM_SIZE = 2;
     private String paramIn = "";
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, String param) {
         super(fragmentActivity);

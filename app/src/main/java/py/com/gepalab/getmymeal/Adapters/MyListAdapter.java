@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,26 +31,21 @@ public class MyListAdapter extends ArrayAdapter<String> {
 
     public MyListAdapter(Activity context, List<String> maintitle, List<String> imgid) {
         super(context, R.layout.list_item, maintitle);
-        // TODO Auto-generated constructor stub
 
         this.context=context;
         this.maintitle=maintitle;
-        //this.subtitle="";
         this.imgid=imgid;
 
     }
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.list_item, null,true);
+        View rowView=inflater.inflate(R.layout.list_item, parent,false);
 
-        TextView titleText = (TextView) rowView.findViewById(R.id.title);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        TextView subtitleText = (TextView) rowView.findViewById(R.id.subtitle);
+        TextView titleText = rowView.findViewById(R.id.title);
+        ImageView imageView = rowView.findViewById(R.id.icon);
 
         titleText.setText(maintitle.get(position));
-        /// dO this in the executor
-        // imageView.setImageBitmap(imgid.get(position));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -58,16 +54,17 @@ public class MyListAdapter extends ArrayAdapter<String> {
             public void run() {
                 Bitmap imBitmap = null; // Maybe some default bitmap here from res?
                 try {
-                    /***
-                     * DO background tasks
+                    /*
+                     * in the background
                      */
                     URL url = new URL(imgid.get(position)); // Fix variable names
                     imBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 } catch(IOException e) {
-                    System.out.println(e);
+                    Log.e("MealAPI", e.getMessage());
                 }
                 Bitmap finalImBitmap = imBitmap;
                 handler.post(new Runnable() {
+                    // back to the UI
                     @Override
                     public void run() {
                         imageView.setImageBitmap(finalImBitmap);
@@ -75,9 +72,6 @@ public class MyListAdapter extends ArrayAdapter<String> {
                 });
             }
         });
-
-        //subtitleText.setText(subtitle[position]);
-
         return rowView;
 
     };

@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import py.com.gepalab.getmymeal.Adapters.MyListAdapter;
 import py.com.gepalab.getmymeal.Domain.Meal;
@@ -36,20 +37,18 @@ public class SearchResultsActivity extends Activity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.e("search query", query);
+            Log.i("search query", query);
             //use the query to search your data somehow
             MealAPI api = new MealAPI();
             api.searchMeal((UIMeal) meals -> {
-                ArrayList<String> mealName = new ArrayList<>();
-                ArrayList<String> mealImages = new ArrayList<>();
-                ArrayList<String> mealImagesView = new ArrayList<>();
-                Log.e("meals size", String.valueOf(meals));
-                if(String.valueOf(meals) != "null"){
+                List<String> mealName = new ArrayList<>();
+                List<String> mealImages = new ArrayList<>();
+                List<String> mealImagesView = new ArrayList<>();
+                if(meals != null  && !meals.isEmpty()){
                     for (Meal meal : meals) {
-                        //Log.e("load by ingredient", meal.strMeal);
-                        mealName.add(meal.strMeal);
-                        mealImages.add(meal.strMealThumb);
-                        mealImagesView.add(meal.strMealImage);
+                        mealName.add(meal.getStrMeal());
+                        mealImages.add(meal.getStrMealThumb());
+                        mealImagesView.add(meal.getStrMealImage());
                     }
                     MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealName, mealImages);
                     //Log.e("Meals", mealName.toString());

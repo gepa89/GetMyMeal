@@ -18,9 +18,9 @@ import py.com.gepalab.getmymeal.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<Bitmap> mViewImages;
-    private List<String> mText;
-    private LayoutInflater mInflater;
+    private final List<Bitmap> mViewImages;
+    private final List<String> mText;
+    private final LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
@@ -67,7 +67,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getBindingAdapterPosition());
         }
     }
 

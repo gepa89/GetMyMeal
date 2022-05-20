@@ -48,16 +48,10 @@ public class MealAPI {
     final String CATEGORY_FILTER = "c";
     final String INGREDIENT_FILTER = "i";
     final String NAME_FILTER = "a";
-    final String NAME_SEARCH = "S";
-    public MealAPI() {
-
-    }
 
     /**
      * List all the {@link Category} available in the menu.
-     *
-     *
-     * @return The {@link List} with all the available Categories.
+     * and calls the UITask to perform the update
      */
     public void listCategory(UITask uiTask){
         Log.e("MealAPI", "Trying to get categories");
@@ -72,24 +66,23 @@ public class MealAPI {
                 for(int i = 0; i < res.length(); i++){
                     final Category category = new Category();
                     final JSONObject jsonObject = res.getJSONObject(i);
-                    category.idCategory = jsonObject.getString("idCategory");
-                    category.strCategory = jsonObject.getString("strCategory");
-                    category.strCategoryThumb = jsonObject.getString("strCategoryThumb");
+                    category.setIdCategory(jsonObject.getString("idCategory"));
+                    category.setStrCategory(jsonObject.getString("strCategory"));
+                    category.setStrCategoryThumb(jsonObject.getString("strCategoryThumb"));
 
-                    category.strCategoryDescription = jsonObject.getString("strCategoryDescription");
+                    category.setStrCategoryDescription(jsonObject.getString("strCategoryDescription"));
 
                     ret.add(category);
 
                 }
                 uiTask.processCategory(ret);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("MealAPI", e.getMessage());
             }
         }, error -> Log.e("MealAPI", error.toString())){
             @Override
             protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
+                return new HashMap<>();
             }
         };
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
@@ -100,34 +93,31 @@ public class MealAPI {
 
     public void listMealForParam(final String searchParam, final String param, UIMeal uiMeal){
         final ArrayList<Meal> ret = new ArrayList<>();
-        Log.e("search Param", searchParam);
-        Log.e("search ", param);
+        Log.i("search Param", searchParam);
+        Log.i("search ", param);
         String tag_string_req = "req_get_meal_by_param";
         String uri = String.format(URL_GET_MEAL+"?"+searchParam+"=%1$s",
                 param);
-        Log.e("search uri", uri);
+        Log.i("search uri", uri);
         StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
-            Log.e("response raw",response);
             try{
                 JSONObject jObj = new JSONObject(response);
                 if(jObj.has("meals")){
-                    if(jObj.get("meals") != null){
-                        JSONArray res =jObj.getJSONArray("meals");
-                        for(int i = 0; i < res.length(); i++){
-                            final Meal meal = new Meal();
-                            final JSONObject jsonObject = res.getJSONObject(i);
-                            meal.idMeal = jsonObject.getString("idMeal");
-                            meal.strMeal = jsonObject.getString("strMeal");
-                            meal.strMealImage = jsonObject.getString("strMealThumb");
-                            meal.strMealThumb = jsonObject.getString("strMealThumb")+"/preview";
-                            // TODO complete implementation
-                            ret.add(meal);
-                        }
-                        uiMeal.processMeal(ret);
+                    jObj.get("meals");
+                    JSONArray res =jObj.getJSONArray("meals");
+                    for(int i = 0; i < res.length(); i++){
+                        final Meal meal = new Meal();
+                        final JSONObject jsonObject = res.getJSONObject(i);
+                        meal.setIdMeal( jsonObject.getString("idMeal"));
+                        meal.setStrMeal( jsonObject.getString("strMeal"));
+                        meal.setStrMealImage(jsonObject.getString("strMealThumb"));
+                        meal.setStrMealThumb(jsonObject.getString("strMealThumb"));
+                        ret.add(meal);
                     }
+                    uiMeal.processMeal(ret);
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("MealAPI", e.getMessage());
 
                 uiMeal.processMeal(null);
                 Log.e("error in query", e.toString());
@@ -135,8 +125,7 @@ public class MealAPI {
         }, error -> Log.e("response", error.toString())){
             @Override
             protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
+                return new HashMap<>();
             }
         };
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
@@ -156,21 +145,18 @@ public class MealAPI {
                 for(int i = 0; i < res.length(); i++){
                     final Recipe recipe = new Recipe();
                     final JSONObject jsonObject = res.getJSONObject(i);
-                    recipe.idMeal = jsonObject.getString("idMeal");
-                    recipe.strMeal = jsonObject.getString("strMeal");
-                    // TODO complete implementation
+                    recipe.setIdMeal(jsonObject.getString("idMeal"));
+                    recipe.setStrMeal(jsonObject.getString("strMeal"));
                     ret.add(recipe);
                 }
-                uiRecipe.processRecipe(ret);
+                uiRecipe.processRecipes(ret);
             } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("error", e.toString());
+                Log.e("MealAPI", e.getMessage());
             }
         }, error -> Log.e("response", error.toString())){
             @Override
             protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
+                return new HashMap<>();
             }
         };
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
@@ -190,23 +176,44 @@ public class MealAPI {
                 for(int i = 0; i < res.length(); i++){
                     final Recipe recipe = new Recipe();
                     final JSONObject jsonObject = res.getJSONObject(i);
-                    recipe.idMeal = jsonObject.getString("idMeal");
-                    recipe.strMeal = jsonObject.getString("strMeal");
-                    recipe.strCategory = jsonObject.getString("strCategory");
-                    recipe.strInstructions = jsonObject.getString("strInstructions");
-                    // TODO complete implementation
+                    recipe.setIdMeal(jsonObject.getString("idMeal"));
+                    recipe.setStrMeal(jsonObject.getString("strMeal"));
+                    recipe.setStrCategory(jsonObject.getString("strCategory"));
+                    recipe.setStrInstructions(jsonObject.getString("strInstructions"));
+                    recipe.setStrArea(jsonObject.getString("strArea"));
+                    recipe.setStrCategory(jsonObject.getString("strCategory"));
+
+                    recipe.setStrIngredient1(jsonObject.getString("strIngredient1"));
+                    recipe.setStrIngredient2(jsonObject.getString("strIngredient2"));
+                    recipe.setStrIngredient3(jsonObject.getString("strIngredient3"));
+                    recipe.setStrIngredient4(jsonObject.getString("strIngredient4"));
+                    recipe.setStrIngredient5(jsonObject.getString("strIngredient5"));
+                    recipe.setStrIngredient6(jsonObject.getString("strIngredient6"));
+                    recipe.setStrIngredient7(jsonObject.getString("strIngredient7"));
+                    recipe.setStrIngredient8(jsonObject.getString("strIngredient8"));
+                    recipe.setStrIngredient9(jsonObject.getString("strIngredient9"));
+
+                    recipe.setStrMeasure1(jsonObject.getString("strMeasure1"));
+                    recipe.setStrMeasure2(jsonObject.getString("strMeasure2"));
+                    recipe.setStrMeasure3(jsonObject.getString("strMeasure3"));
+                    recipe.setStrMeasure4(jsonObject.getString("strMeasure4"));
+                    recipe.setStrMeasure5(jsonObject.getString("strMeasure5"));
+                    recipe.setStrMeasure6(jsonObject.getString("strMeasure6"));
+                    recipe.setStrMeasure7(jsonObject.getString("strMeasure7"));
+                    recipe.setStrMeasure8(jsonObject.getString("strMeasure8"));
+                    recipe.setStrMeasure9(jsonObject.getString("strMeasure9"));
+                    
+                    
                     ret.add(recipe);
                 }
-                uiRecipe.processRecipe(ret);
+                uiRecipe.processRecipes(ret);
             } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("error", e.toString());
+                Log.e("MealAPI", e.getMessage());
             }
         }, error -> Log.e("response", error.toString())){
             @Override
             protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                return params;
+                return new HashMap<>();
             }
         };
         AppController.getInstance().addToRequestQueue(stReq, tag_string_req);
