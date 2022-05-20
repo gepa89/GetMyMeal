@@ -26,11 +26,6 @@ Features include:
 There are different ways to get the GetMyMeal app for Android; from github or building it yourself.
 
 
-
-### From GitHub
-
-Access the GitHub repository by cloning [GitHub Repo](https://github.com/gepa89/GetMyMeal.git)
-
 ## Building
 
 ### With Gradle
