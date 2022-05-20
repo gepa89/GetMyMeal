@@ -53,6 +53,8 @@ public class SearchResultsActivity extends Activity {
                             mealImagesGlo.add(meal.getStrMealThumb());
                             mealImagesViewGlo.add(meal.getStrMealImage());
                             mealIDGlo.add(meal.getIdMeal());
+                            mealNameGlo.remove("No Results");
+                            mealImagesGlo.remove("");
                         }
                     }
                     MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
