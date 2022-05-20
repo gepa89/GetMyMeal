@@ -46,54 +46,145 @@ public class SearchResultsActivity extends Activity {
             List<String> mealIDGlo = new ArrayList<>();
 
             api.searchMeal((UIMeal) meals -> {
+                Log.e("mealinIng", meals.toString());
                 if(meals != null  && !meals.isEmpty()){
                     for (Meal meal : meals) {
+                        mealNameGlo.add(meal.getStrMeal());
+                        mealImagesGlo.add(meal.getStrMealThumb());
+                        mealImagesViewGlo.add(meal.getStrMealImage());
+                        mealIDGlo.add(meal.getIdMeal());
                         aggregateMeals(mergedArr, meal);
                     }
+                    MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
+
+                    listAdapter.notifyDataSetChanged();
+                    lvSearchResult.setAdapter(listAdapter);
+
+                    lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
+                        Bundle mBundle = new Bundle();
+                        String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                        String imgUri = mealImagesViewGlo.get(position1);
+                        String mealID = mealIDGlo.get(position1);
+                        mBundle.putString("recipe", recipe);
+                        mBundle.putString("recThumb", imgUri);
+                        mBundle.putString("recID", mealID);
+                        Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
+                        intent1.putExtras(mBundle);
+                        startActivity(intent1);
+                    });
                 }
             }, query, "ing");
             api.searchMeal((UIMeal) meals -> {
+                Log.e("mealinCat", meals.toString());
                 if(meals != null  && !meals.isEmpty()){
                     for (Meal meal : meals) {
+                        mealNameGlo.add(meal.getStrMeal());
+                        mealImagesGlo.add(meal.getStrMealThumb());
+                        mealImagesViewGlo.add(meal.getStrMealImage());
+                        mealIDGlo.add(meal.getIdMeal());
                         aggregateMeals(mergedArr, meal);
                     }
+                    MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
+
+                    listAdapter.notifyDataSetChanged();
+                    lvSearchResult.setAdapter(listAdapter);
+
+                    lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
+                        Bundle mBundle = new Bundle();
+                        String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                        String imgUri = mealImagesViewGlo.get(position1);
+                        String mealID = mealIDGlo.get(position1);
+                        mBundle.putString("recipe", recipe);
+                        mBundle.putString("recThumb", imgUri);
+                        mBundle.putString("recID", mealID);
+                        Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
+                        intent1.putExtras(mBundle);
+                        startActivity(intent1);
+                    });
                 }
             }, query, "cat");
             api.searchMeal((UIMeal) meals -> {
+                Log.e("mealinCat", meals.toString());
                 if(meals != null  && !meals.isEmpty()){
                     for (Meal meal : meals) {
+                        mealNameGlo.add(meal.getStrMeal());
+                        mealImagesGlo.add(meal.getStrMealThumb());
+                        mealImagesViewGlo.add(meal.getStrMealImage());
+                        mealIDGlo.add(meal.getIdMeal());
                         aggregateMeals(mergedArr, meal);
                     }
+                    MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
+
+                    listAdapter.notifyDataSetChanged();
+                    lvSearchResult.setAdapter(listAdapter);
+
+                    lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
+                        Bundle mBundle = new Bundle();
+                        String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                        String imgUri = mealImagesViewGlo.get(position1);
+                        String mealID = mealIDGlo.get(position1);
+                        mBundle.putString("recipe", recipe);
+                        mBundle.putString("recThumb", imgUri);
+                        mBundle.putString("recID", mealID);
+                        Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
+                        intent1.putExtras(mBundle);
+                        startActivity(intent1);
+                    });
+                }
+            }, query, "are");
+            api.searchMeal((UIMeal) meals -> {
+                Log.e("mealinNam", meals.toString());
+                if(meals != null  && !meals.isEmpty()){
+                    for (Meal meal : meals) {
+                        mealNameGlo.add(meal.getStrMeal());
+                        mealImagesGlo.add(meal.getStrMealThumb());
+                        mealImagesViewGlo.add(meal.getStrMealImage());
+                        mealIDGlo.add(meal.getIdMeal());
+                        aggregateMeals(mergedArr, meal);
+                    }
+                    MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
+
+                    listAdapter.notifyDataSetChanged();
+                    lvSearchResult.setAdapter(listAdapter);
+
+                    lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
+                        Bundle mBundle = new Bundle();
+                        String recipe = String.valueOf(parent.getItemAtPosition(position1));
+                        String imgUri = mealImagesViewGlo.get(position1);
+                        String mealID = mealIDGlo.get(position1);
+                        mBundle.putString("recipe", recipe);
+                        mBundle.putString("recThumb", imgUri);
+                        mBundle.putString("recID", mealID);
+                        Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
+                        intent1.putExtras(mBundle);
+                        startActivity(intent1);
+                    });
                 }
             }, query, "nam");
+            Log.e("merged", mergedArr.toString());
             for (Meal meal:mergedArr){
                 mealNameGlo.add(meal.getStrMeal());
                 mealImagesGlo.add(meal.getStrMealThumb());
                 mealImagesViewGlo.add(meal.getStrMealImage());
                 mealIDGlo.add(meal.getIdMeal());
             }
-            MyListAdapter listAdapter = new MyListAdapter(SearchResultsActivity.this, mealNameGlo, mealImagesGlo);
 
-            listAdapter.notifyDataSetChanged();
-            lvSearchResult.setAdapter(listAdapter);
-
-            lvSearchResult.setOnItemClickListener((parent, view1, position1, id) -> {
-                Bundle mBundle = new Bundle();
-                String recipe = String.valueOf(parent.getItemAtPosition(position1));
-                String imgUri = mealImagesViewGlo.get(position1);
-                String mealID = mealIDGlo.get(position1);
-                mBundle.putString("recipe", recipe);
-                mBundle.putString("recThumb", imgUri);
-                mBundle.putString("recID", mealID);
-                //Toast.makeText(SearchResultsActivity.this, recipe, Toast.LENGTH_LONG).show();
-                Intent intent1 = new Intent(SearchResultsActivity.this, RecipeActivity.class);
-                intent1.putExtras(mBundle);
-                startActivity(intent1);
-            });
         }
     }
 
     public synchronized void aggregateMeals(List<Meal> merged, Meal meals) {
-            merged.add(meals);
+        List<Meal> toAdd = new ArrayList<>();
+
+            boolean adding = true;
+            for(Meal meal:merged) {
+                if(meal.getIdMeal().equals(meal.getIdMeal())) {
+                    adding = false;
+                }
+            }
+            if(adding) {
+                toAdd.add(meals);
+            }
+
+        merged.addAll(toAdd);
     }
 }

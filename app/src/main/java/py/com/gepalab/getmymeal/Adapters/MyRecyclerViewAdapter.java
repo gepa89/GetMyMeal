@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import py.com.gepalab.getmymeal.R;
@@ -66,7 +67,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(getBindingAdapterPosition());
+            if (mClickListener != null) {
+                try {
+                    mClickListener.onItemClick(getBindingAdapterPosition());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -82,7 +89,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(int position) throws UnsupportedEncodingException;
 
     }
 }

@@ -34,6 +34,7 @@ public class MealAPI {
     final String ID_SEARCH = "i";
     final String CATEGORY_FILTER = "c";
     final String INGREDIENT_FILTER = "i";
+    final String SEARCH_BY_FILTER = "s";
     final String NAME_FILTER = "a";
 
     /**
@@ -83,13 +84,19 @@ public class MealAPI {
         Log.i("search Param", searchParam);
         Log.i("search ", param);
         String tag_string_req = "req_get_meal_by_param";
-        String uri = String.format(URL_GET_MEAL+"?"+searchParam+"=%1$s",
-                param);
+        String baseUri = "";
+        if(searchParam == "s"){
+            baseUri = URL_SEARCH_MEAL;
+        }else{
+            baseUri = URL_GET_MEAL;
+        }
+        String uri = String.format(baseUri+"?"+searchParam+"=%1$s",
+                param.replaceAll(" ", "%20"));
         Log.i("search uri", uri);
         StringRequest stReq = new StringRequest(Request.Method.GET, uri, response -> {
             try{
                 JSONObject jObj = new JSONObject(response);
-                if(jObj.has("meals")){
+                if(jObj.has("meals") && !jObj.get("meals").equals(null)){
                     jObj.get("meals");
                     JSONArray res =jObj.getJSONArray("meals");
                     for(int i = 0; i < res.length(); i++){
@@ -104,9 +111,7 @@ public class MealAPI {
                     uiMeal.processMeal(ret);
                 }
             } catch (JSONException e) {
-                Log.e("MealAPI", e.getMessage());
-
-                uiMeal.processMeal(null);
+                Log.e("MealAPI SearchParam", e.getMessage());
                 Log.e("error in query", e.toString());
             }
         }, error -> Log.e("response", error.toString())){
@@ -187,10 +192,13 @@ public class MealAPI {
                 listMealForParam(CATEGORY_FILTER, strQuery, uiMeal);
                 break;
             case "nam":
-                listMealForParam(NAME_FILTER, strQuery, uiMeal);
+                listMealForParam(SEARCH_BY_FILTER, strQuery, uiMeal);
                 break;
             case "ing":
                 listMealForParam(INGREDIENT_FILTER, strQuery, uiMeal);
+                break;
+            case "are":
+                listMealForParam(NAME_FILTER, strQuery, uiMeal);
                 break;
         }
     }

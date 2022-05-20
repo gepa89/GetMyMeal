@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position) throws UnsupportedEncodingException {
         TextView tvCatTitle = findViewById(R.id.tvCatTitle);
         tvCatTitle.setText(adapter.getItem(position));
         lvMeals = findViewById(R.id.lvMeals);
