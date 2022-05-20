@@ -2,6 +2,7 @@
 .gradle/
 build/
 docs/
+*.sh
 
 # Local configuration file (sdk path, etc)
 local.properties
