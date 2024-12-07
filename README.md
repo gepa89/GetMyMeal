@@ -1,5 +1,4 @@
 # GetMyMeal
-##### Natura Challenge
 ## Introduction
 GetMyMeal is an application designed for Android. It allows to choose a Meal and view it's description.
 
